@@ -3,58 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Proceso de Baja de Bienes</title>
+
+       <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- JS Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+
     <style>
         body {
-            font-family: 'Open Sans', Arial, sans-serif;
-            margin: 0;
+            font-family: 'Roboto','Open Sans', Arial, sans-serif;
             background-color: #ffffff;
             color: #1D2B4F;
         }
+         .logo-tigre {
+            height: 60px;
+            object-fit: contain;
+           
+        }
+        .logo-unemi {
+            height: 50px;
+            object-fit: contain;
+           
+        }
         .franja-superior {
             background-color: #1D2B4F;
-            height: 40px;
-            width: 100%;
+           
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
         }
         .franja-naranja {
+            height: 10px;
             background-color: #F39200;
-            height: 15px;
-            width: 100%;
-        }
-        .contenido {
-            padding: 20px;
         }
         h2 {
-            text-align: center;
             color: #1D2B4F;
             font-weight: 700;
             margin-top: 20px;
         }
         label {
             font-weight: 600;
-            color: #1D2B4F;
-            display: block;
-            margin-top: 10px;
         }
-        select {
-            margin-top: 5px;
-            margin-bottom: 15px;
-            padding: 8px;
-            width: 100%;
-            max-width: 500px;
-            border: 1px solid #ccc;
+        .btngb {
+            color: #ffffff;
+            border: none;
             border-radius: 5px;
-            color: #1D2B4F;
+            font-weight: bolder;
+            padding: 7px;
+            font-size: 18px;
+        }
+        .btngd {
+            background-color: #F39200;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-weight: bolder;
+            padding: 7px;
+            font-size: 18px;
+        }
+        .btngb:hover {
+            background-color: #063970;
+            color: white;
+        }
+        .btngd:hover {
+            background-color: #d97e00;
+            color: white;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 5px;
+            padding: 8px;
             text-align: center;
         }
         th {
@@ -68,69 +97,79 @@
         tr:hover {
             background-color: #f1f1f1;
         }
-        .boton {
-            margin-top: 20px;
-            background-color: #F39200;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .boton:hover {
-            background-color: #d97e00;
-        }
     </style>
 </head>
 <body>
 
-<div class="franja-superior"></div>
-<div class="franja-naranja"></div>
-
-<div class="contenido">
-    <div id="vistaListado">
-        <h2>Listado de Bienes para Proceso de Baja</h2>
-
-        <label for="estadoFiltro">Filtrar por Estado:</label>
-        <select id="estadoFiltro" onchange="filtrarTabla()">
-            <option value="todos">Mostrar Todos</option>
-            <option value="Malo">Malo</option>
-            <option value="Regular">Regular</option>
-        </select>
-
-        <table id="tablaBienes">
-            <thead>
-                <tr>
-                    <th class="w-auto">Código gobierno</th>
-                    <th class="w-auto">Código interno</th>
-                    <th class="w-auto">Bien</th>
-                    <th style="width:25%">Descripción</th>
-                    <th class="w-auto">Marca</th>
-                    <th class="w-auto">Modelo</th>
-                    <th class="w-auto">Estado</th>
-                    <th class="w-auto">Condicion</th>
-                    <th class="w-auto">Tipo de Baja</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Datos dinámicos -->
-            </tbody>
-        </table>
-
-        <button class="boton" onclick="guardarDatos()">Guardar</button>
-        <button class="boton" onclick="guardarBorrador()">Guardar Borrador</button>
+<!-- Encabezado -->
+<div class="franja-superior d-flex justify-content-between align-items-center px-3">
+    <!-- Izquierda -->
+    <div class="d-flex align-items-center">
+        <img src="C:\Users\ASEG_CALIDAD\Downloads\logo-unemi.png" alt="Logo" class="logo-tigre">
     </div>
+
+    <!-- Centro -->
+    <div class="text-center flex-grow-1">
+        <h2 style="color:white" class="fw-bold mb-0">Proceso de Baja</h2>
+    </div>
+
+    <!-- Derecha -->
+    <div class="d-flex align-items-center justify-content-end">
+        <img src="C:\Users\ASEG_CALIDAD\Downloads\unemi-logo.png" alt="Logo" class="logo-unemi">
+    </div>
+</div>
+    <div class="franja-naranja"></div>
+
+<div class="container mt-12">
+
+    <div class="row mt-2">
+        <div class="col-md-4">
+            <label for="estadoFiltro">Filtrar por Estado:</label>
+            <select id="estadoFiltro" class="form-select" onchange="filtrarTabla()">
+                <option value="todos">Mostrar Todos</option>
+                <option value="Malo">Malo</option>
+                <option value="Regular">Regular</option>
+            </select>
+        </div>
+        <div class="col-md-8 mt-4">    
+                <button class="btn btn-primary btn-sm btngb" onclick="guardarBorrador()">Guardar Borrador</button>
+                <button class="btn btn-sm btngd" onclick="guardarDatos()">Finalizar Inspección</button>
+  
+        </div>
+
+
+    </div>
+    <div class="row mt-4 mb-4">
+        <div class="col-md-12">
+            <table id="tablaBienes" class="table-responsive-lg caption-top  ">
+                <caption>Listado de Bienes</caption>
+                <thead>
+                    <tr>
+                        <th>Código gobierno</th>
+                        <th>Código interno</th>
+                        <th>Bien</th>
+                        <th>Descripción</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Estado</th>
+                        <th>Condición</th>
+                        <th>Tipo de Baja</th>
+                    </tr>
+                </thead>
+                <tbodyy>
+                    <!-- Datos dinámicos -->
+                </tbody>
+            </table>
+        </div>
+    </div>  
 </div>
 
 <script>
 function filtrarTabla() {
-    var filtro = document.getElementById('estadoFiltro').value;
-    var filas = document.querySelectorAll('#tablaBienes tbody tr');
+    const filtro = document.getElementById('estadoFiltro').value;
+    const filas = document.querySelectorAll('#tablaBienes tbody tr');
     filas.forEach(fila => {
-        var estado = fila.dataset.estado;
+        const estado = fila.dataset.estado;
         fila.style.display = (filtro === 'todos' || estado === filtro) ? '' : 'none';
     });
 }
@@ -138,54 +177,11 @@ function filtrarTabla() {
 function guardarDatos() {
     const filas = document.querySelectorAll('#tablaBienes tbody tr');
     const datos = [];
-
     filas.forEach(fila => {
         const celdas = fila.querySelectorAll('td');
-        const tipoBajaSelect = celdas[9].querySelector('select');
-
+        const tipoBajaSelect = celdas[8].querySelector('select');
         datos.push({
-            codigo_gobierno: celdas[2].innerText.trim(),
-            codigo_interno: celdas[3].innerText.trim(),
-            bien: celdas[0].innerText.trim(),
-            descripcion: celdas[1].innerText.trim(),
-            marca: celdas[4].innerText.trim(),
-            modelo: celdas[5].innerText.trim(),
-            estado: celdas[7].innerText.trim(),
-            condicion: celdas[8].innerText.trim(),
-            tipo_baja: tipoBajaSelect ? tipoBajaSelect.value.trim() : ''
-        });
-    });
-
-    fetch('https://hook.us2.make.com/zeqwqiwr9i6kl8n9vwwuvqcdxbarbh3e', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ bienes: datos })
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Datos guardados correctamente.');
-        } else {
-            alert('Error al guardar los datos. Código: ' + response.status);
-        }
-    })
-    .catch(error => {
-        console.error('Error en la solicitud:', error);
-        alert('Error en la conexión al guardar los datos.');
-    });
-}
-
-function guardarBorrador() {
-    const filas = document.querySelectorAll('#tablaBienes tbody tr');
-    const datos = [];
-
-    filas.forEach(fila => {
-        const celdas = fila.querySelectorAll('td');
-        const tipoBajaSelect = celdas[8].querySelector('select'); // Corrección: índice 9, no 8
-
-        datos.push({
-            origen: "borrador", 
+            origen: "reportes",
             codigo_gobierno: celdas[0].innerText.trim(),
             codigo_interno: celdas[1].innerText.trim(),
             bien: celdas[2].innerText.trim(),
@@ -193,38 +189,54 @@ function guardarBorrador() {
             marca: celdas[4].innerText.trim(),
             modelo: celdas[5].innerText.trim(),
             estado: celdas[6].innerText.trim(),
-            condicion: celdas[7].innerText.trim(), // <- ¡Recuerda! Ahora hay un nuevo campo: Condicion
+            condicion: celdas[7].innerText.trim(),
             tipo_baja: tipoBajaSelect ? tipoBajaSelect.value.trim() : ''
         });
     });
 
     fetch('https://hook.us2.make.com/zeqwqiwr9i6kl8n9vwwuvqcdxbarbh3e', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ bienes: datos }) // empaquetado en objeto
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bienes: datos })
     })
-    .then(response => {
-        if (response.ok) {
-            alert('Borrador guardado exitosamente.');
-        } else {
-            alert('Error al guardar el borrador. Código: ' + response.status);
-        }
-    })
-    .catch(error => {
-        console.error('Error en la solicitud:', error);
-        alert('Error en la conexión al guardar el borrador.');
+    .then(response => alert(response.ok ? 'Datos guardados correctamente.' : 'Error al guardar los datos. Código: ' + response.status))
+    .catch(error => alert('Error en la conexión al guardar los datos.'));
+}
+
+function guardarBorrador() {
+    const filas = document.querySelectorAll('#tablaBienes tbody tr');
+    const datos = [];
+    filas.forEach(fila => {
+        const celdas = fila.querySelectorAll('td');
+        const tipoBajaSelect = celdas[8].querySelector('select');
+        datos.push({
+            origen: "borrador",
+            codigo_gobierno: celdas[0].innerText.trim(),
+            codigo_interno: celdas[1].innerText.trim(),
+            bien: celdas[2].innerText.trim(),
+            descripcion: celdas[3].innerText.trim(),
+            marca: celdas[4].innerText.trim(),
+            modelo: celdas[5].innerText.trim(),
+            estado: celdas[6].innerText.trim(),
+            condicion: celdas[7].innerText.trim(),
+            tipo_baja: tipoBajaSelect ? tipoBajaSelect.value.trim() : ''
+        });
     });
+
+    fetch('https://hook.us2.make.com/zeqwqiwr9i6kl8n9vwwuvqcdxbarbh3e', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bienes: datos })
+    })
+    .then(response => alert(response.ok ? 'Borrador guardado exitosamente.' : 'Error al guardar el borrador. Código: ' + response.status))
+    .catch(error => alert('Error en la conexión al guardar el borrador.'));
 }
 
 function actualizarMatriz() {
     fetch('https://hook.us2.make.com/zeqwqiwr9i6kl8n9vwwuvqcdxbarbh3e', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ origen: "act_matriz" }) //
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ origen: "act_matriz" })
     })
     .then(response => response.json())
     .then(data => {
@@ -233,20 +245,18 @@ function actualizarMatriz() {
         data.forEach(item => {
             const fila = document.createElement('tr');
             fila.dataset.estado = item.estado;
-
-            const tipoBaja = item.tipo_de_baja ? item.tipo_de_baja : '';
-
+            const tipoBaja = item.tipo_de_baja || '';
             fila.innerHTML = `
-                <td class="w-auto">${item.codigo_gobierno}</td>
-                <td class="w-auto">${item.codigo_interno}</td>
-                <td class="w-auto">${item.bien}</td>
-                <td style="width:25%">${item.descripcion}</td>
-                <td class="w-auto">${item.marca}</td>
-                <td class="w-auto">${item.modelo}</td>
-                <td class="w-auto">${item.estado}</td>
-                <td class="w-auto">${item.condicion}</td>
-                <td class="w-auto">
-                    <select>
+                <td>${item.codigo_gobierno}</td>
+                <td>${item.codigo_interno}</td>
+                <td>${item.bien}</td>
+                <td>${item.descripcion}</td>
+                <td>${item.marca}</td>
+                <td>${item.modelo}</td>
+                <td>${item.estado}</td>
+                <td>${item.condicion}</td>
+                <td>
+                    <select class="form-select">
                         <option value="">Seleccione...</option>
                         <option value="Chatarrización" ${tipoBaja === 'Chatarrización' ? 'selected' : ''}>Chatarrización</option>
                         <option value="Transferencia" ${tipoBaja === 'Transferencia' ? 'selected' : ''}>Transferencia</option>
@@ -257,9 +267,7 @@ function actualizarMatriz() {
             tbody.appendChild(fila);
         });
     })
-    .catch(error => {
-        console.error('Error al cargar datos:', error);
-    });
+    .catch(error => console.error('Error al cargar datos:', error));
 }
 
 window.onload = actualizarMatriz;
