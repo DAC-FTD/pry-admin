@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Proceso de Baja de Bienes</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            margin: 0;
+            background-color: #ffffff;
+            color: #1D2B4F;
+        }
+        .franja-superior {
+            background-color: #1D2B4F;
+            height: 40px;
+            width: 100%;
+        }
+        .franja-naranja {
+            background-color: #F39200;
+            height: 15px;
+            width: 100%;
+        }
+        .contenido {
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #1D2B4F;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+        label {
+            font-weight: 600;
+            color: #1D2B4F;
+            display: block;
+            margin-top: 10px;
+        }
+        select {
+            margin-top: 5px;
+            margin-bottom: 15px;
+            padding: 8px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: #1D2B4F;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: center;
+        }
+        th {
+            background-color: #1D2B4F;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .boton {
+            margin-top: 20px;
+            background-color: #F39200;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .boton:hover {
+            background-color: #d97e00;
+        }
+    </style>
+</head>
+<body>
+
+<div class="franja-superior"></div>
+<div class="franja-naranja"></div>
+
+<div class="contenido">
+    <div id="vistaListado">
+        <h2>Listado de Bienes para Proceso de Baja</h2>
+
+        <label for="estadoFiltro">Filtrar por Estado:</label>
+        <select id="estadoFiltro" onchange="filtrarTabla()">
+            <option value="todos">Mostrar Todos</option>
+            <option value="Malo">Malo</option>
+            <option value="Regular">Regular</option>
+        </select>
+
+        <table id="tablaBienes">
+            <thead>
+                <tr>
+                    <th class="w-auto">Código gobierno</th>
+                    <th class="w-auto">Código interno</th>
+                    <th class="w-auto">Bien</th>
+                    <th style="width:25%">Descripción</th>
+                    <th class="w-auto">Marca</th>
+                    <th class="w-auto">Modelo</th>
+                    <th class="w-auto">Estado</th>
+                    <th class="w-auto">Condicion</th>
+                    <th class="w-auto">Tipo de Baja</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Datos dinámicos -->
+            </tbody>
+        </table>
+
+        <button class="boton" onclick="guardarDatos()">Guardar</button>
+        <button class="boton" onclick="guardarBorrador()">Guardar Borrador</button>
+    </div>
+</div>
+
+<script>
+function filtrarTabla() {
+    var filtro = document.getElementById('estadoFiltro').value;
+    var filas = document.querySelectorAll('#tablaBienes tbody tr');
+    filas.forEach(fila => {
+        var estado = fila.dataset.estado;
+        fila.style.display = (filtro === 'todos' || estado === filtro) ? '' : 'none';
+    });
+}
+
+function guardarDatos() {
+    const filas = document.querySelectorAll('#tablaBienes tbody tr');
+    const datos = [];
+
+    filas.forEach(fila => {
+        const celdas = fila.querySelectorAll('td');
+        const tipoBajaSelect = celdas[9].querySelector('select');
+
+        datos.push({
+            codigo_gobierno: celdas[2].innerText.trim(),
+            codigo_interno: celdas[3].innerText.trim(),
+            bien: celdas[0].innerText.trim(),
+            descripcion: celdas[1].innerText.trim(),
+            marca: celdas[4].innerText.trim(),
+            modelo: celdas[5].innerText.trim(),
+            estado: celdas[7].innerText.trim(),
+            condicion: celdas[8].innerText.trim(),
+            tipo_baja: tipoBajaSelect ? tipoBajaSelect.value.trim() : ''
+        });
+    });
+
+    fetch('https://hook.us2.make.com/zeqwqiwr9i6kl8n9vwwuvqcdxbarbh3e', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ bienes: datos })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Datos guardados correctamente.');
+        } else {
+            alert('Error al guardar los datos. Código: ' + response.status);
+        }
+    })
+    .catch(error => {
+        console.error('Error en la solicitud:', error);
+        alert('Error en la conexión al guardar los datos.');
+    });
+}
+
+function guardarBorrador() {
+    const filas = document.querySelectorAll('#tablaBienes tbody tr');
+    const datos = [];
+
+    filas.forEach(fila => {
+        const celdas = fila.querySelectorAll('td');
+        const tipoBajaSelect = celdas[8].querySelector('select'); // Corrección: índice 9, no 8
+
+        datos.push({
+            origen: "borrador", 
+            codigo_gobierno: celdas[0].innerText.trim(),
+            codigo_interno: celdas[1].innerText.trim(),
+            bien: celdas[2].innerText.trim(),
+            descripcion: celdas[3].innerText.trim(),
+            marca: celdas[4].innerText.trim(),
+            modelo: celdas[5].innerText.trim(),
+            estado: celdas[6].innerText.trim(),
+            condicion: celdas[7].innerText.trim(), // <- ¡Recuerda! Ahora hay un nuevo campo: Condicion
+            tipo_baja: tipoBajaSelect ? tipoBajaSelect.value.trim() : ''
+        });
+    });
+
+    fetch('https://hook.us2.make.com/zeqwqiwr9i6kl8n9vwwuvqcdxbarbh3e', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ bienes: datos }) // empaquetado en objeto
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Borrador guardado exitosamente.');
+        } else {
+            alert('Error al guardar el borrador. Código: ' + response.status);
+        }
+    })
+    .catch(error => {
+        console.error('Error en la solicitud:', error);
+        alert('Error en la conexión al guardar el borrador.');
+    });
+}
+
+function actualizarMatriz() {
+    fetch('https://hook.us2.make.com/zeqwqiwr9i6kl8n9vwwuvqcdxbarbh3e', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ origen: "act_matriz" }) //
+    })
+    .then(response => response.json())
+    .then(data => {
+        const tbody = document.querySelector('#tablaBienes tbody');
+        tbody.innerHTML = '';
+        data.forEach(item => {
+            const fila = document.createElement('tr');
+            fila.dataset.estado = item.estado;
+
+            const tipoBaja = item.tipo_de_baja ? item.tipo_de_baja : '';
+
+            fila.innerHTML = `
+                <td class="w-auto">${item.codigo_gobierno}</td>
+                <td class="w-auto">${item.codigo_interno}</td>
+                <td class="w-auto">${item.bien}</td>
+                <td style="width:25%">${item.descripcion}</td>
+                <td class="w-auto">${item.marca}</td>
+                <td class="w-auto">${item.modelo}</td>
+                <td class="w-auto">${item.estado}</td>
+                <td class="w-auto">${item.condicion}</td>
+                <td class="w-auto">
+                    <select>
+                        <option value="">Seleccione...</option>
+                        <option value="Chatarrización" ${tipoBaja === 'Chatarrización' ? 'selected' : ''}>Chatarrización</option>
+                        <option value="Transferencia" ${tipoBaja === 'Transferencia' ? 'selected' : ''}>Transferencia</option>
+                        <option value="Remate" ${tipoBaja === 'Remate' ? 'selected' : ''}>Remate</option>
+                    </select>
+                </td>
+            `;
+            tbody.appendChild(fila);
+        });
+    })
+    .catch(error => {
+        console.error('Error al cargar datos:', error);
+    });
+}
+
+window.onload = actualizarMatriz;
+</script>
+
+</body>
+</html>
