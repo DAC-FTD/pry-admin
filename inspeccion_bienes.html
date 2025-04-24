@@ -230,6 +230,8 @@ function actualizarMatriz() {
     })
     .then(response => response.json())
     .then(data => {
+        console.log("Datos recibidos:", data); // Añadir esto
+    // Resto del código
         const tbody = document.querySelector('#tablaBienes tbody');
         tbody.innerHTML = '';
         data.forEach(item => {
