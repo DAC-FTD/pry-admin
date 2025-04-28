@@ -222,7 +222,7 @@ function guardarBorrador() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bienes: datos })
     })
-    .then(response => alert(response.ok ? 'Borrador guardado exitosamente.' : 'Error al guardar el borrador. Código: ' + response.status))
+    .then(response => Swal.fire(response.ok ? 'Borrador guardado exitosamente.' : 'Error al guardar el borrador. Código: ' + response.status))
     .catch(error => alert('Error en la conexión al guardar el borrador.'));
 }
 
