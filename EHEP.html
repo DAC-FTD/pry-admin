@@ -71,13 +71,13 @@
             margin-top: 10px;
         }
     </style>
-        <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
 </head>
 <body>
     
     <h6 style="text-align: center;">Matriz de resultados del Examen de Habilitación para el Ejercicio Profesional</h6>
-<!-- Sección para cargar imagen -->
+
+    <!-- Sección para cargar imagen -->
     <div class="upload-section">
         <h3>Cargar Imagen para Procesar</h3>
         <div class="upload-container">
@@ -92,6 +92,11 @@
     <div id="result"></div>
 
     <script>
+        let registros = [
+            { asignatura: "Fundamentos de Enfermería", componente: "Componente A", subcomponente: "Subcomponente 1", tema: "Teoría del cuidado", docente: "Dr. Pérez", aciertos: 0 },
+            { asignatura: "Proceso de Atención", componente: "Componente B", subcomponente: "Subcomponente 2", tema: "Valoración de Enfermería", docente: "Dr. Gómez", aciertos: 0 }
+        ];
+
         // Función que maneja el procesamiento de la imagen cargada
         function procesarImagen() {
             var file = document.getElementById("imgfile").files[0];  // Obtener el archivo cargado
@@ -115,6 +120,9 @@
                 ).then(({ data: { text } }) => {
                     // Mostrar los datos extraídos en la página
                     document.getElementById("result").innerText = text;
+
+                    // Comparar los datos extraídos con los registros
+                    compararConRegistros(text);
                 }).catch(error => {
                     // Manejar errores
                     console.error("Error al procesar la imagen:", error);
@@ -124,7 +132,6 @@
 
             // Leer la imagen como URL (base64)
             reader.readAsDataURL(file);
-        }
         }
 
         // Función para comparar los datos extraídos con los registros
@@ -161,96 +168,31 @@
                     registro.componente.includes(palabra);
             }).length;
 
-    </script>
-
-
-    
-    <div class="search-container">
-        <label for="searchInput">Buscar en la tabla:</label>
-        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Buscar...">
-    </div>
-
-  <table id="tabla" border="1"></table>
-
-  <script>
-    fetch("https://script.google.com/macros/s/AKfycbygRrWr9Nqvq0cocKGPOfdzE8mJ3A8OpyjgyTkgTg2XkZMKYn9Dxid-jjeaBo-j4NtrhA/exec") // Reemplaza por la URL generada al publicar
-      .then(response => response.json())
-      .then(data => {
-        const tabla = document.getElementById("tabla");
-        if (data.length === 0) return;
-
-        const columnas = ["Asignatura", "Componente", "Subcomponente", "Tema", "Profesor", "tipo", "Periodo", "% de Acierto"];
-
-        // Crear encabezado de la tabla
-        let encabezado = "<tr>";
-        columnas.forEach(col => {
-          encabezado += `<th>${col}</th>`;
-        });
-        encabezado += "</tr>";
-        tabla.innerHTML += encabezado;
-
-        // Rellenar la tabla con los datos
-        data.forEach(fila => {
-          let filaHtml = "<tr>";
-          columnas.forEach(col => {
-            filaHtml += `<td>${fila[col] || ''}</td>`;
-          });
-          filaHtml += "</tr>";
-          tabla.innerHTML += filaHtml;
-        });
-      })
-      .catch(error => console.error("Error al cargar los datos:", error));
-
-    // Función para buscar en la tabla
-    function searchTable() {
-        var input = document.getElementById("searchInput").value.toUpperCase();
-        var table = document.getElementById("tabla");
-        var tr = table.getElementsByTagName("tr");
-
-        for (var i = 1; i < tr.length; i++) {
-            var tds = tr[i].getElementsByTagName("td");
-            var found = false;
-
-            for (var j = 0; j < tds.length; j++) {
-                var td = tds[j];
-                if (td) {
-                    var txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(input) > -1) {
-                        found = true;
-                    }
-                }
-            }
-
-            if (found) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
+            // Aciertos como un porcentaje de la longitud de la fila
+            return (coincidencias / fila.split(" ").length) * 100;
         }
-    }
-  </script>
 
-    <!-- Sección para cargar documentos -->
-    <div class="upload-section">
-        <h3>Subir Documentos</h3>
-        <div class="upload-container">
-            <input type="file" id="fileInput" multiple>
-            <label for="fileInput">Arrastra y suelta los archivos aquí o haz clic para seleccionar</label>
-            <span>Tipos de archivos permitidos: .pdf, .docx, .xlsx</span>
-        </div>
-        <button onclick="uploadFiles()">Agregar Documento</button>
-    </div>
+        // Función para actualizar la tabla con los nuevos valores de Aciertos (%)
+        function actualizarTabla() {
+            const tabla = document.getElementById("tabla");
+            tabla.innerHTML = ""; // Limpiar la tabla existente
 
-    <script>
-        // Función para manejar la carga de archivos
-        function uploadFiles() {
-            var files = document.getElementById("fileInput").files;
-            if (files.length > 0) {
-                alert(files.length + " archivo(s) cargado(s) exitosamente.");
-                // Aquí puedes agregar lógica para procesar los archivos y actualizar la tabla
-            } else {
-                alert("No se seleccionó ningún archivo.");
-            }
+            // Crear encabezado de la tabla
+            let encabezado = "<tr><th>Asignatura</th><th>Componente</th><th>Subcomponente</th><th>Tema</th><th>Docente</th><th>Aciertos (%)</th></tr>";
+            tabla.innerHTML += encabezado;
+
+            // Rellenar la tabla con los datos actualizados
+            registros.forEach(registro => {
+                let filaHtml = "<tr>";
+                filaHtml += `<td>${registro.asignatura}</td>`;
+                filaHtml += `<td>${registro.componente}</td>`;
+                filaHtml += `<td>${registro.subcomponente}</td>`;
+                filaHtml += `<td>${registro.tema}</td>`;
+                filaHtml += `<td>${registro.docente}</td>`;
+                filaHtml += `<td>${registro.aciertos.toFixed(2)}%</td>`;
+                filaHtml += "</tr>";
+                tabla.innerHTML += filaHtml;
+            });
         }
     </script>
 
