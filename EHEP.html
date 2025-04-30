@@ -72,7 +72,6 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
-
 </head>
 <body>
     
@@ -137,8 +136,11 @@
                     // Mostrar los datos extraídos en la página
                     document.getElementById("result").innerText = text;
 
+                    // Limpiar y estructurar los datos extraídos
+                    let cleanedText = limpiarTexto(text);
+
                     // Comparar los datos extraídos con los registros
-                    compararConRegistros(text);
+                    compararConRegistros(cleanedText);
                 }).catch(error => {
                     // Manejar errores
                     console.error("Error al procesar la imagen:", error);
@@ -148,6 +150,11 @@
 
             // Leer la imagen como URL (base64)
             reader.readAsDataURL(file);
+        }
+
+        // Función para limpiar el texto extraído de la imagen
+        function limpiarTexto(text) {
+            return text.replace(/\n/g, " ").replace(/\s+/g, " ").trim();
         }
 
         // Función para comparar los datos extraídos con los registros
