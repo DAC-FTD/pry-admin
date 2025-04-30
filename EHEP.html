@@ -90,20 +90,55 @@
         const tabla = document.getElementById("tabla");
         if (data.length === 0) return;
 
-        const columnas = ["Asignatura", "Componente", "Subcomponente", "Tema", "Profesor", "tipo", "Periodo"];
+        const columnas = ["Asignatura", "Componente", "Subcomponente", "Tema", "Profesor", "tipo", "Periodo", "% de Acierto"];
 
+        // Crear encabezado de la tabla
         let encabezado = "<tr>";
-        columnas.forEach(col => encabezado += <th>${col}</th>);
+        columnas.forEach(col => {
+          encabezado += `<th>${col}</th>`;
+        });
         encabezado += "</tr>";
         tabla.innerHTML += encabezado;
 
+        // Rellenar la tabla con los datos
         data.forEach(fila => {
           let filaHtml = "<tr>";
-          columnas.forEach(col => filaHtml += <td>${fila[col] || ''}</td>);
+          columnas.forEach(col => {
+            filaHtml += `<td>${fila[col] || ''}</td>`;
+          });
           filaHtml += "</tr>";
           tabla.innerHTML += filaHtml;
         });
-      });
+      })
+      .catch(error => console.error("Error al cargar los datos:", error));
+
+    // Función para buscar en la tabla
+    function searchTable() {
+        var input = document.getElementById("searchInput").value.toUpperCase();
+        var table = document.getElementById("tabla");
+        var tr = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < tr.length; i++) {
+            var tds = tr[i].getElementsByTagName("td");
+            var found = false;
+
+            for (var j = 0; j < tds.length; j++) {
+                var td = tds[j];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(input) > -1) {
+                        found = true;
+                    }
+                }
+            }
+
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
   </script>
 
     <!-- Sección para cargar documentos -->
@@ -117,6 +152,18 @@
         <button onclick="uploadFiles()">Agregar Documento</button>
     </div>
 
+    <script>
+        // Función para manejar la carga de archivos
+        function uploadFiles() {
+            var files = document.getElementById("fileInput").files;
+            if (files.length > 0) {
+                alert(files.length + " archivo(s) cargado(s) exitosamente.");
+                // Aquí puedes agregar lógica para procesar los archivos y actualizar la tabla
+            } else {
+                alert("No se seleccionó ningún archivo.");
+            }
+        }
+    </script>
 
 </body>
 </html>
