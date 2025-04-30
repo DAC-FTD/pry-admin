@@ -90,6 +90,11 @@
 
     <!-- Resultados del OCR -->
     <div id="result"></div>
+ // Array de registros de ejemplo (deberías cargarlos desde tu fuente de datos, por ejemplo Google Sheets)
+        let registros = [
+            { asignatura: "Fundamentos de Enfermería", componente: "Componente A", subcomponente: "Subcomponente 1", tema: "Teoría del cuidado", docente: "Dr. Pérez", aciertos: 0 },
+            { asignatura: "Proceso de Atención", componente: "Componente B", subcomponente: "Subcomponente 2", tema: "Valoración de Enfermería", docente: "Dr. Gómez", aciertos: 0 }
+        ];
 
     <script>
         // Función que maneja el procesamiento de la imagen cargada
@@ -125,6 +130,42 @@
             // Leer la imagen como URL (base64)
             reader.readAsDataURL(file);
         }
+        }
+
+        // Función para comparar los datos extraídos con los registros
+        function compararConRegistros(text) {
+            const filas = text.split("\n");  // Dividir el texto por líneas
+            filas.forEach(fila => {
+                registros.forEach((registro, index) => {
+                    if (compararDatos(fila, registro)) {
+                        // Actualizar el porcentaje de aciertos en función de la coincidencia
+                        const aciertos = calcularAciertos(fila, registro);
+                        registros[index].aciertos = aciertos;
+
+                        // Actualizar la tabla con el nuevo porcentaje de aciertos
+                        actualizarTabla();
+                    }
+                });
+            });
+        }
+
+        // Función para comparar los datos de la imagen con los registros
+        function compararDatos(fila, registro) {
+            return (
+                fila.includes(registro.tema) ||
+                fila.includes(registro.subcomponente) ||
+                fila.includes(registro.componente)
+            );
+        }
+
+        // Función para calcular los aciertos basado en la comparación
+        function calcularAciertos(fila, registro) {
+            const coincidencias = fila.split(" ").filter(palabra => {
+                return registro.tema.includes(palabra) ||
+                    registro.subcomponente.includes(palabra) ||
+                    registro.componente.includes(palabra);
+            }).length;
+
     </script>
 
 
