@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriz de resultados del Examen de Habilitación para el Ejercicio Profesional</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        caption {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .filters select, .filters input {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .filters {
+            margin-bottom: 10px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-container input {
+            padding: 10px;
+            width: 50%;
+            font-size: 16px;
+        }
+        .upload-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .upload-container {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            width: 50%;
+            margin: 0 auto;
+        }
+        .upload-container input[type="file"] {
+            display: none;
+        }
+        .upload-container label {
+            cursor: pointer;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+        }
+        .upload-container span {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center;">Matriz de resultados del Examen de Habilitación para el Ejercicio Profesional</h1>
+
+    <div class="search-container">
+        <label for="searchInput">Buscar en la tabla:</label>
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Buscar...">
+    </div>
+
+    <table>
+        <caption>Detalles de los Resultados del Examen</caption>
+        <thead>
+            <tr>
+                <th>Asignatura
+                    <div class="filters">
+                        <select id="filterAsignatura" onchange="filterTable()">
+                            <option value="">Seleccionar Asignatura</option>
+                            <option value="Ejemplo Asignatura">Ejemplo Asignatura</option>
+                            <option value="Asignatura 2">Asignatura 2</option>
+                        </select>
+                    </div>
+                </th>
+                <th>Componente
+                    <div class="filters">
+                        <select id="filterComponente" onchange="filterTable()">
+                            <option value="">Seleccionar Componente</option>
+                            <option value="Componente 1">Componente 1</option>
+                            <option value="Componente 2">Componente 2</option>
+                        </select>
+                    </div>
+                </th>
+                <th>Subcomponente
+                    <div class="filters">
+                        <select id="filterSubcomponente" onchange="filterTable()">
+                            <option value="">Seleccionar Subcomponente</option>
+                            <option value="Subcomponente A">Subcomponente A</option>
+                            <option value="Subcomponente B">Subcomponente B</option>
+                        </select>
+                    </div>
+                </th>
+                <th>Tema
+                    <div class="filters">
+                        <select id="filterTema" onchange="filterTable()">
+                            <option value="">Seleccionar Tema</option>
+                            <option value="Tema X">Tema X</option>
+                            <option value="Tema Y">Tema Y</option>
+                        </select>
+                    </div>
+                </th>
+                <th>Profesor
+                    <div class="filters">
+                        <select id="filterProfesor" onchange="filterTable()">
+                            <option value="">Seleccionar Profesor</option>
+                            <option value="Profesor 1">Profesor 1</option>
+                            <option value="Profesor 2">Profesor 2</option>
+                        </select>
+                    </div>
+                </th>
+                <th>Tipo
+                    <div class="filters">
+                        <select id="filterTipo" onchange="filterTable()">
+                            <option value="">Seleccionar Tipo</option>
+                            <option value="Tipo A">Tipo A</option>
+                            <option value="Tipo B">Tipo B</option>
+                        </select>
+                    </div>
+                </th>
+                <th>Periodo
+                    <div class="filters">
+                        <select id="filterPeriodo" onchange="filterTable()">
+                            <option value="">Seleccionar Periodo</option>
+                            <option value="Periodo 2024">Periodo 2024</option>
+                            <option value="Periodo 2025">Periodo 2025</option>
+                        </select>
+                    </div>
+                </th>
+                <th>% de Acierto</th> <!-- Nueva columna -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Datos de ejemplo -->
+            <tr>
+                <td>Ejemplo Asignatura</td>
+                <td>Componente 1</td>
+                <td>Subcomponente A</td>
+                <td>Tema X</td>
+                <td>Profesor 1</td>
+                <td>Tipo A</td>
+                <td>Periodo 2024</td>
+                <td>80%</td> <!-- Ejemplo de % de acierto -->
+            </tr>
+            <tr>
+                <td>Asignatura 2</td>
+                <td>Componente 2</td>
+                <td>Subcomponente B</td>
+                <td>Tema Y</td>
+                <td>Profesor 2</td>
+                <td>Tipo B</td>
+                <td>Periodo 2024</td>
+                <td>85%</td> <!-- Ejemplo de % de acierto -->
+            </tr>
+            <!-- Más filas se agregarían aquí -->
+        </tbody>
+    </table>
+
+    <!-- Sección para cargar documentos -->
+    <div class="upload-section">
+        <h3>Subir Documentos</h3>
+        <div class="upload-container">
+            <input type="file" id="fileInput" multiple>
+            <label for="fileInput">Arrastra y suelta los archivos aquí o haz clic para seleccionar</label>
+            <span>Tipos de archivos permitidos: .pdf, .docx, .xlsx</span>
+        </div>
+        <button onclick="uploadFiles()">Agregar Documento</button>
+    </div>
+
+    <script>
+        // Función para filtrar las filas de la tabla
+        function filterTable() {
+            var inputAsignatura = document.getElementById("filterAsignatura").value.toUpperCase();
+            var inputComponente = document.getElementById("filterComponente").value.toUpperCase();
+            var inputSubcomponente = document.getElementById("filterSubcomponente").value.toUpperCase();
+            var inputTema = document.getElementById("filterTema").value.toUpperCase();
+            var inputProfesor = document.getElementById("filterProfesor").value.toUpperCase();
+            var inputTipo = document.getElementById("filterTipo").value.toUpperCase();
+            var inputPeriodo = document.getElementById("filterPeriodo").value.toUpperCase();
+            
+            var table = document.querySelector("table");
+            var tr = table.getElementsByTagName("tr");
+            
+            // Iterar sobre todas las filas y ocultar aquellas que no coincidan con el filtro
+            for (var i = 1; i < tr.length; i++) {
+                var tdAsignatura = tr[i].getElementsByTagName("td")[0];
+                var tdComponente = tr[i].getElementsByTagName("td")[1];
+                var tdSubcomponente = tr[i].getElementsByTagName("td")[2];
+                var tdTema = tr[i].getElementsByTagName("td")[3];
+                var tdProfesor = tr[i].getElementsByTagName("td")[4];
+                var tdTipo = tr[i].getElementsByTagName("td")[5];
+                var tdPeriodo = tr[i].getElementsByTagName("td")[6];
+                var tdAcierto = tr[i].getElementsByTagName("td")[7]; // Columna de acierto
+                
+                if (tdAsignatura && tdComponente && tdSubcomponente && tdTema && tdProfesor && tdTipo && tdPeriodo) {
+                    var txtAsignatura = tdAsignatura.textContent || tdAsignatura.innerText;
+                    var txtComponente = tdComponente.textContent || tdComponente.innerText;
+                    var txtSubcomponente = tdSubcomponente.textContent || tdSubcomponente.innerText;
+                    var txtTema = tdTema.textContent || tdTema.innerText;
+                    var txtProfesor = tdProfesor.textContent || tdProfesor.innerText;
+                    var txtTipo = tdTipo.textContent || tdTipo.innerText;
+                    var txtPeriodo = tdPeriodo.textContent || tdPeriodo.innerText;
+                    var txtAcierto = tdAcierto.textContent || tdAcierto.innerText;
+
+                    if (txtAsignatura.toUpperCase().indexOf(inputAsignatura) > -1 &&
+                        txtComponente.toUpperCase().indexOf(inputComponente) > -1 &&
+                        txtSubcomponente.toUpperCase().indexOf(inputSubcomponente) > -1 &&
+                        txtTema.toUpperCase().indexOf(inputTema) > -1 &&
+                        txtProfesor.toUpperCase().indexOf(inputProfesor) > -1 &&
+                        txtTipo.toUpperCase().indexOf(inputTipo) > -1 &&
+                        txtPeriodo.toUpperCase().indexOf(inputPeriodo) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // Función de búsqueda general para toda la tabla
+        function searchTable() {
+            var input = document.getElementById("searchInput").value.toUpperCase();
+            var table = document.querySelector("table");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < tr.length; i++) {
+                var tds = tr[i].getElementsByTagName("td");
+                var found = false;
+
+                for (var j = 0; j < tds.length; j++) {
+                    var td = tds[j];
+                    if (td) {
+                        var txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(input) > -1) {
+                            found = true;
+                        }
+                    }
+                }
+
+                if (found) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
+        // Función para manejar la carga de archivos
+        function uploadFiles() {
+            var files = document.getElementById("fileInput").files;
+            if (files.length > 0) {
+                alert(files.length + " archivo(s) cargado(s) exitosamente.");
+                // Aquí puedes agregar lógica para procesar los archivos y actualizar la tabla
+            } else {
+                alert("No se seleccionó ningún archivo.");
+            }
+        }
+    </script>
+
+</body>
+</html>
