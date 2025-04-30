@@ -3,11 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extraer datos de la Imagen y Comparar</title>
+    <title>Matriz de resultados del Examen de Habilitación para el Ejercicio Profesional</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        caption {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .filters select, .filters input {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .filters {
+            margin-bottom: 10px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-container input {
+            padding: 10px;
+            width: 50%;
+            font-size: 16px;
         }
         .upload-section {
             margin-top: 20px;
@@ -33,33 +70,14 @@
             display: block;
             margin-top: 10px;
         }
-        #result {
-            margin-top: 20px;
-            font-size: 1.1rem;
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
     </style>
-    <!-- Cargar Tesseract.js -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
+
 </head>
 <body>
-
-    <h1>Extraer Datos desde Imagen (OCR) y Comparar con Tabla</h1>
-
-    <!-- Sección para cargar imagen -->
+    
+    <h6 style="text-align: center;">Matriz de resultados del Examen de Habilitación para el Ejercicio Profesional</h6>
+<!-- Sección para cargar imagen -->
     <div class="upload-section">
         <h3>Cargar Imagen para Procesar</h3>
         <div class="upload-container">
@@ -73,45 +91,7 @@
     <!-- Resultados del OCR -->
     <div id="result"></div>
 
-    <!-- Tabla de registros de evaluación -->
-    <table id="tablaResultados">
-        <thead>
-            <tr>
-                <th>Asignatura</th>
-                <th>Componente</th>
-                <th>Subcomponente</th>
-                <th>Tema</th>
-                <th>Docente</th>
-                <th>Aciertos (%)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Fundamentos de Enfermería</td>
-                <td>Componente A</td>
-                <td>Subcomponente 1</td>
-                <td>Teoría del cuidado</td>
-                <td>Dr. Pérez</td>
-                <td>0%</td>
-            </tr>
-            <tr>
-                <td>Proceso de Atención</td>
-                <td>Componente B</td>
-                <td>Subcomponente 2</td>
-                <td>Valoración de Enfermería</td>
-                <td>Dr. Gómez</td>
-                <td>0%</td>
-            </tr>
-            <!-- Más filas se pueden agregar aquí -->
-        </tbody>
-    </table>
-
     <script>
-        let registros = [
-            { asignatura: "Fundamentos de Enfermería", componente: "Componente A", subcomponente: "Subcomponente 1", tema: "Teoría del cuidado", docente: "Dr. Pérez", aciertos: 0 },
-            { asignatura: "Proceso de Atención", componente: "Componente B", subcomponente: "Subcomponente 2", tema: "Valoración de Enfermería", docente: "Dr. Gómez", aciertos: 0 }
-        ];
-
         // Función que maneja el procesamiento de la imagen cargada
         function procesarImagen() {
             var file = document.getElementById("imgfile").files[0];  // Obtener el archivo cargado
@@ -135,9 +115,6 @@
                 ).then(({ data: { text } }) => {
                     // Mostrar los datos extraídos en la página
                     document.getElementById("result").innerText = text;
-
-                    // Comparar los datos extraídos con los registros
-                    compararConRegistros(text);
                 }).catch(error => {
                     // Manejar errores
                     console.error("Error al procesar la imagen:", error);
@@ -148,62 +125,96 @@
             // Leer la imagen como URL (base64)
             reader.readAsDataURL(file);
         }
+    </script>
 
-        // Función para comparar los datos extraídos con los registros
-        function compararConRegistros(text) {
-            const filas = text.split("\n");  // Dividir el texto por líneas
-            filas.forEach(fila => {
-                registros.forEach((registro, index) => {
-                    if (compararDatos(fila, registro)) {
-                        // Actualizar el porcentaje de aciertos en función de la coincidencia
-                        const aciertos = calcularAciertos(fila, registro);
-                        registros[index].aciertos = aciertos;
 
-                        // Actualizar la tabla con el nuevo porcentaje de aciertos
-                        actualizarTabla();
+    
+    <div class="search-container">
+        <label for="searchInput">Buscar en la tabla:</label>
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Buscar...">
+    </div>
+
+  <table id="tabla" border="1"></table>
+
+  <script>
+    fetch("https://script.google.com/macros/s/AKfycbygRrWr9Nqvq0cocKGPOfdzE8mJ3A8OpyjgyTkgTg2XkZMKYn9Dxid-jjeaBo-j4NtrhA/exec") // Reemplaza por la URL generada al publicar
+      .then(response => response.json())
+      .then(data => {
+        const tabla = document.getElementById("tabla");
+        if (data.length === 0) return;
+
+        const columnas = ["Asignatura", "Componente", "Subcomponente", "Tema", "Profesor", "tipo", "Periodo", "% de Acierto"];
+
+        // Crear encabezado de la tabla
+        let encabezado = "<tr>";
+        columnas.forEach(col => {
+          encabezado += `<th>${col}</th>`;
+        });
+        encabezado += "</tr>";
+        tabla.innerHTML += encabezado;
+
+        // Rellenar la tabla con los datos
+        data.forEach(fila => {
+          let filaHtml = "<tr>";
+          columnas.forEach(col => {
+            filaHtml += `<td>${fila[col] || ''}</td>`;
+          });
+          filaHtml += "</tr>";
+          tabla.innerHTML += filaHtml;
+        });
+      })
+      .catch(error => console.error("Error al cargar los datos:", error));
+
+    // Función para buscar en la tabla
+    function searchTable() {
+        var input = document.getElementById("searchInput").value.toUpperCase();
+        var table = document.getElementById("tabla");
+        var tr = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < tr.length; i++) {
+            var tds = tr[i].getElementsByTagName("td");
+            var found = false;
+
+            for (var j = 0; j < tds.length; j++) {
+                var td = tds[j];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(input) > -1) {
+                        found = true;
                     }
-                });
-            });
+                }
+            }
+
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
         }
+    }
+  </script>
 
-        // Función para comparar los datos de la imagen con los registros
-        function compararDatos(fila, registro) {
-            return (
-                fila.includes(registro.tema) ||
-                fila.includes(registro.subcomponente) ||
-                fila.includes(registro.componente)
-            );
-        }
+    <!-- Sección para cargar documentos -->
+    <div class="upload-section">
+        <h3>Subir Documentos</h3>
+        <div class="upload-container">
+            <input type="file" id="fileInput" multiple>
+            <label for="fileInput">Arrastra y suelta los archivos aquí o haz clic para seleccionar</label>
+            <span>Tipos de archivos permitidos: .pdf, .docx, .xlsx</span>
+        </div>
+        <button onclick="uploadFiles()">Agregar Documento</button>
+    </div>
 
-        // Función para calcular los aciertos basado en la comparación
-        function calcularAciertos(fila, registro) {
-            const coincidencias = fila.split(" ").filter(palabra => {
-                return registro.tema.includes(palabra) ||
-                    registro.subcomponente.includes(palabra) ||
-                    registro.componente.includes(palabra);
-            }).length;
-
-            // Aciertos como un porcentaje de la longitud de la fila
-            return (coincidencias / fila.split(" ").length) * 100;
-        }
-
-        // Función para actualizar la tabla con los nuevos valores de Aciertos (%)
-        function actualizarTabla() {
-            const tbody = document.getElementById("tablaResultados").getElementsByTagName("tbody")[0];
-            tbody.innerHTML = "";
-
-            registros.forEach(registro => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${registro.asignatura}</td>
-                    <td>${registro.componente}</td>
-                    <td>${registro.subcomponente}</td>
-                    <td>${registro.tema}</td>
-                    <td>${registro.docente}</td>
-                    <td>${registro.aciertos.toFixed(2)}%</td>
-                `;
-                tbody.appendChild(tr);
-            });
+    <script>
+        // Función para manejar la carga de archivos
+        function uploadFiles() {
+            var files = document.getElementById("fileInput").files;
+            if (files.length > 0) {
+                alert(files.length + " archivo(s) cargado(s) exitosamente.");
+                // Aquí puedes agregar lógica para procesar los archivos y actualizar la tabla
+            } else {
+                alert("No se seleccionó ningún archivo.");
+            }
         }
     </script>
 
