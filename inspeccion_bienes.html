@@ -2,13 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Convocatoria de Comisión de Baja</title>
+    <title>Determinación de bienes para Proceso Baja</title>
     <link rel="icon" type="image/png" href="img/logo-unemi.png">
-    <!-- Bootstrap CSS -->
+       <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <!-- DataTable -->
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
     <!-- JS Libraries -->
@@ -18,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    
 
     <style>
         body {
@@ -25,12 +27,7 @@
             background-color: #ffffff;
             color: #1D2B4F;
         }
-        .select2-container--default .select2-selection--multiple {
-            border: 1px solid #ced4da;
-            border-radius: 0.700rem;
-            padding: 0.700rem;
-        }
-        .logo-tigre {
+         .logo-tigre {
             height: 60px;
             object-fit: contain;
            
@@ -43,7 +40,7 @@
         .franja-superior {
             background-color: #1D2B4F;
             color: white;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
             vertical-align: middle;
         }
@@ -51,34 +48,46 @@
             height: 10px;
             background-color: #F39200;
         }
+        .btngb {
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
 
-        #tablaIntegrantes td, #tablaIntegrantes th {
+        }
+        .btngd {
+            background-color: #F39200;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+
+        }
+        .btngb:hover {
+            background-color: #063970;
+            color: white;
+        }
+        .btngd:hover {
+            background-color: #d97e00;
+            color: white;
+        }
+        
+ 
+        #tablaBienes td, #tablaBienes th {
         padding: 8px;
         vertical-align: middle;
         text-align: center;
         color: #1D2B4F;
       }
-
-        .btnenviar {
-            background-color: #F39200;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            font-weight: bolder;
-            padding: 8px;
-            font-size: 18px;
+        #tablaBienes tbody td {
+            font-size: 12px;!important; /* Tamaño reducido para el cuerpo de la tabla */
         }
 
-      .btnenviar:hover {
-            background-color: #d97e00;
-            color: white;
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
-        
-    
+
     </style>
 </head>
 <body>
-
 
 <!-- Encabezado -->
 <div class="franja-superior d-flex justify-content-between align-items-center px-3">
@@ -88,8 +97,8 @@
     </div>
 
     <!-- Centro -->
-    <div class="text-center flex-grow-1">
-        <h2 style="color:white;" class="fw-bold">Convocatoria de Comisión de Baja</h2>
+    <div class="text-center">
+        <h2 style="color:white;" class="fw-bold">Determinación de bienes para Proceso Baja</h2>
     </div>
 
     <!-- Derecha -->
@@ -99,186 +108,299 @@
 </div>
 <div class="franja-naranja"></div>
 
+<div class="container mt-12">
 
-   <div class="container mt-12">
-        <div class="row mt-3">
-            <!-- Formulario de datos -->
-            <div class="col-md-4">
-                <div class="card shadow-sm mb-3">
-                    <div class="card-body">
-                        <h5 class="fw-bold mb-3">Datos de la Convocatoria</h5>
-
-                        <div class="mb-3">
-                            <label for="nombreConvocatoria" class="form-label">Nombre de la Convocatoria</label>
-                            <input type="text" class="form-control" id="nombreConvocatoria" placeholder="Convocatoria 2025...">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="fechaConvocatoria" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="fechaConvocatoria">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="horaInicio" class="form-label">Hora de Inicio</label>
-                            <input type="time" class="form-control" id="horaInicio">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="horaFin" class="form-label">Hora de Fin</label>
-                            <input type="time" class="form-control" id="horaFin">
-                        </div>
-                    </div>
-                </div>
-                <!-- Botón de envío -->
-                <div class="text-center ">
-                <button class="btn btnenviar" onclick="confirmarEnvio()">Enviar Convocatoria</button>
-                </div>
-            </div>
-
-            <!-- Participantes -->
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="fw-bold mb-3">Seleccionar Participantes</h5>
-
-                        <div class="mb-3">
-                            <select id="selectParticipante" class="form-select" multiple></select>
-                        </div>
-
-                        <h6 class="fw-bold">Participantes Seleccionados</h6>
-                        <table id="tablaIntegrantes" class="table table-hover table-sm mt-2">
-                            <thead class="table-primary">
-                                <tr class="cabecera-tabla">
-                                    <th>Nombre</th>
-                                    <th>Correo</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaParticipantes"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <div class="row align-items-center mt-3">
+    <!-- Columna Izquierda -->
+    <div class="col-md-6 d-flex align-items-center">
+        <select id="selectorTipoBaja" class="form-select me-2" style="width: auto;">
+            <option value="">Seleccione tipo de baja</option>
+            <option value="Chatarrización">Chatarrización</option>
+            <option value="Remate">Remate</option>
+            <option value="Transferencia">Transferencia</option>
+        </select>
+        <button id="btnAplicarSeleccion" class="btn btn-primary btn-sm" onclick="AplicarSeleccion()">Aplicar a seleccionados</button>
     </div>
 
-<script>
-const participantes = [
-    { nombre: 'ALMEIDA MONGE ELKA JENNIFER', correo: 'jsamaniegov@unemi.edu.ec' },
-    { nombre: 'ALVARADO PORRAS FRANCISCO MARCELO', correo: 'atrellesg@unemi.edu.ec' },
-    { nombre: 'AMEN LOOR HUGO ENRIQUE', correo: 'byuquim@unemi.edu.ec' },
-    { nombre: 'BURGOS GONZALEZ GRACIELA GERMANIA', correo: 'tortizo@unemi.edu.ec' },
-    { nombre: 'CHIFLA VILLON MARIO RUBEN', correo: 'szapatierc1@unemi.edu.ec' }
-];
+    <!-- Columna Derecha -->
+    <div class="col-md-6 d-flex justify-content-end align-items-center">
+        <button class="btn btn-primary btn-sm btngb me-2 " onclick="guardarBorrador()">Guardar borrador</button>
+        <button class="btn btn-primary btn-sm btngd" onclick="guardarDatos()">Finalizar proceso</button>
+    </div>
+</div>
 
-$(document).ready(function() {
-    const select = $('#selectParticipante');
-    participantes.forEach((p, i) => {
-        select.append(new Option(p.nombre, i));
-    });
+    <h6 class="fw-bold mb-0 mt-3">Listado de bienes</h6>
+     <div class="card shadow-sm mb-3 mt-1">
+        <div class="card-body">
+            <div class="table-responsive-lg">
+                <table id="tablaBienes" class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th><input type="checkbox" id="checkAll"></th> <!-- Check para seleccionar todos -->
+                            <th>Código gobierno</th>
+                            <th>Código interno</th>
+                            <th>Bien</th>
+                            <th>Descripción</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Estado</th>
+                            <th>Condición</th>
+                            <th>Tipo de Baja</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Datos dinámicos -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    select.select2({
-        placeholder: "Seleccione participantes...",
-        width: '100%'
-    });
+ 
+</div>
 
-    select.on('change', function() {
-        const seleccionados = $(this).val();
-        const tbody = $('#tablaParticipantes');
-        tbody.empty();
+<script> 
 
-        seleccionados.forEach(i => {
-            const p = participantes[i];
-            tbody.append(`
-                <tr id="fila-${i}">
-                    <td style="vertical-align: middle; text-align: center;">${p.nombre}</td>
-                    <td style="vertical-align: middle; text-align: center;">${p.correo}</td>
-                    <td style="vertical-align: middle; text-align: center;"><button style="background-color:#b94a48; color:white;" class="btn btn-sm" onclick="eliminarParticipante(${i})">Eliminar</button></td>
-                </tr>
-            `);
-        });
-    });
+document.getElementById('checkAll').addEventListener('click', function() {
+    const checked = this.checked;
+    document.querySelectorAll('.checkBien').forEach(c => c.checked = checked);
 });
 
-function eliminarParticipante(index) {
-    $(`#fila-${index}`).remove();
-    let seleccionados = $('#selectParticipante').val();
-    seleccionados = seleccionados.filter(i => i != index);
-    $('#selectParticipante').val(seleccionados).trigger('change');
+
+function actualizarMatriz() {
+     fetch('https://hook.us2.make.com/a6iqx6iilho1b8k1vt2s2l65oewtcmyp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ origen: "act_matriz" })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.estado === 'procesados') {
+            // Mostrar alerta
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Sin procesos pendientes',
+                    text: 'No existen bienes por procesar. Esta pantalla se encuentra bloqueada.',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+            }
+
+            else{
+            const tbody = document.querySelector('#tablaBienes tbody');
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                const fila = document.createElement('tr');
+                fila.dataset.estado = item.estado;
+                const tipoBaja = item.tipo_baja || ' ';
+                fila.innerHTML = `
+                    <td><input type="checkbox" class="checkBien"></td>
+                    <td>${item.codigo_gobierno}</td>
+                    <td>${item.codigo_interno}</td>
+                    <td>${item.bien}</td>
+                    <td>${item.descripcion}</td>
+                    <td>${item.marca}</td>
+                    <td>${item.modelo}</td>
+                    <td>${item.estado}</td>
+                    <td>${item.condicion}</td>
+                    <td>
+                        <select class="form-select tipo-baja-select">
+                            <option value="">Seleccione...</option>
+                            <option value="Chatarrización" ${tipoBaja === 'Chatarrización' ? 'selected' : ''}>Chatarrización</option>
+                            <option value="Transferencia" ${tipoBaja === 'Transferencia' ? 'selected' : ''}>Transferencia</option>
+                            <option value="Remate" ${tipoBaja === 'Remate' ? 'selected' : ''}>Remate</option>
+                        </select>
+                    </td>
+
+                `;
+                tbody.appendChild(fila);
+            });
+
+            var table = $('#tablaBienes').DataTable({
+                destroy: true,
+                pageLength: 20,
+                lengthChange: false,
+                ordering: false,
+                orderCellsTop: true,
+                fixedHeader: true,
+                language: {
+                search: "Buscar:",
+                zeroRecords: "No se encontraron registros",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior"
+                    }
+                }   
+            });
+
+
+            $('.tipo-baja-select').select2({
+                width: '100%',
+                placeholder: "Seleccione...",
+                dropdownAutoWidth: true
+            });
+
+            table.on('draw', function() {
+                // Solo inicializar Select2 en los selects que NO tengan ya el atributo "select2-hidden-accessible"
+                $('#tablaBienes tbody .tipo-baja-select').each(function() {
+                    if (!$(this).hasClass('select2-hidden-accessible')) {
+                        $(this).select2({
+                            width: '100%',
+                            placeholder: "Seleccione...",
+                            dropdownAutoWidth: true
+                        });
+                    }
+                });
+            });
+            } 
+
+        })
+        .catch(error => Swal.fire('Error', 'No se cargaron los datos.', 'error'));
 }
 
-function confirmarEnvio() {
-    Swal.fire({
-        title: '¿Está seguro?',
-        text: "Se enviará la convocatoria a los participantes seleccionados.",
-        icon: 'question',
-        showCancelButton: true, 
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, enviar'
-    }).then(result => {
-        if (result.isConfirmed) enviarConvocatoria();
+function guardarBorrador() {
+    const table = $('#tablaBienes').DataTable(); // Obtener instancia de DataTable
+    const allData = table.rows().data(); // Obtener todos los datos de todas las páginas
+
+    const datos = [];
+
+    allData.each(function (rowData, index) {
+        const rowNode = table.row(index).node(); // Obtener el nodo real del <tr>
+        const celdas = rowNode.querySelectorAll('td');
+
+        const codigoGobierno = celdas[1]?.innerText.trim();
+        const tipoBajaSelect = celdas[9]?.querySelector('select');
+
+        if (codigoGobierno && tipoBajaSelect) {
+            datos.push({
+                origen:"borrador",
+                codigo_gobierno: codigoGobierno,
+                tipo_baja: tipoBajaSelect.value.trim()
+            });
+        }
+    });
+
+    fetch('https://hook.us2.make.com/a6iqx6iilho1b8k1vt2s2l65oewtcmyp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bienes: datos })
+    })
+    .then(response =>Swal.fire({icon: 'success',title: 'Éxito',text: 'Borrador guardado exitosamente.',timer: 2000,showConfirmButton: false}))
+    .catch(error => Swal.fire('Error', 'Error en la conexión al guardar el borrador.', 'error'));
+}
+
+function AplicarSeleccion() {
+    const tipoSeleccionado = document.getElementById('selectorTipoBaja').value;
+
+    if (!tipoSeleccionado) {
+        Swal.fire('Advertencia', 'Debe seleccionar un tipo de baja.', 'warning');
+        return;
+    }
+
+    let cambiosRealizados = false;
+
+    // Recorrer todos los checks seleccionados
+    document.querySelectorAll('.checkBien:checked').forEach(check => {
+        const fila = check.closest('tr');
+        
+        // Buscar el select dentro de la fila
+        const selectTipoBaja = fila.querySelector('select');
+
+        if (selectTipoBaja) {
+            selectTipoBaja.value = tipoSeleccionado; // 🔥 Cambiamos el valor directamente del <select>
+            selectTipoBaja.dispatchEvent(new Event('change')); // 🔥 Forzamos que el navegador "dibuje" el cambio
+            cambiosRealizados = true;
+        }
+    });
+
+    if (cambiosRealizados) {
+        guardarBorrador();
+         //  1. Reiniciar todos los checkboxes
+        document.querySelectorAll('.checkBien').forEach(check => check.checked = false);
+        //  2. Reiniciar el combo general de tipo de baja
+        document.getElementById('selectorTipoBaja').value = '';
+    } else {
+        Swal.fire('Advertencia', 'No seleccionó ningún registro.', 'warning');
+    }
+}
+    
+function guardarDatos() {
+    const table = $('#tablaBienes').DataTable();
+    const allData = table.rows().data();
+    const datos = [];
+    let hayFaltantes = false;
+
+    allData.each(function (rowData, index) {
+        const rowNode = table.row(index).node(); //  Accede al <tr> completo
+        const celdas = rowNode.querySelectorAll('td');
+        const tipoBajaSelect = celdas[9]?.querySelector('select');
+        const tipoBajaValor = tipoBajaSelect ? tipoBajaSelect.value.trim() : '';
+
+        if (!tipoBajaValor) {
+            hayFaltantes = true;
+        }
+
+        datos.push({
+            origen: "reportes",
+            codigo_gobierno: celdas[1]?.innerText.trim(),
+            codigo_interno: celdas[2]?.innerText.trim(),
+            bien: celdas[3]?.innerText.trim(),
+            descripcion: celdas[4]?.innerText.trim(),
+            marca: celdas[5]?.innerText.trim(),
+            modelo: celdas[6]?.innerText.trim(),
+            estado: celdas[7]?.innerText.trim(),
+            condicion: celdas[8]?.innerText.trim(),
+            tipo_baja: tipoBajaValor
+        });
+    });
+
+    //  Validación: mostrar error si falta algún tipo de baja
+    if (hayFaltantes) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campos incompletos',
+            text: 'Debe asignar un tipo de baja a todos los bienes antes de finalizar el proceso.'
+        });
+        return;
+    }
+
+    // ✅ Mostrar loader
+    document.getElementById('loader-overlay').style.display = 'flex';
+
+
+    // Envío si todo está correcto
+    fetch('https://hook.us2.make.com/a6iqx6iilho1b8k1vt2s2l65oewtcmyp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bienes: datos })
+    })
+    .then(data => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'Proceso finalizado exitosamente.',
+            timer: 2000,
+            showConfirmButton: false
+        });
+        // ✅ Ocultar loader al recibir respuesta
+        document.getElementById('loader-overlay').style.display = 'none';
+        location.reload();
+    })
+    .catch(error => {
+        Swal.fire('Error', error.message, 'error');
     });
 }
 
-function enviarConvocatoria() {
-    const nombre = $('#nombreConvocatoria').val();
-    const fecha = $('#fechaConvocatoria').val();
-    const inicio = $('#horaInicio').val();
-    const fin = $('#horaFin').val();
-    const seleccionados = $('#selectParticipante').val();
-    const hoy = new Date().toISOString().split('T')[0]; // formato yyyy-mm-dd
-
-    if (!nombre || !fecha || !inicio || !fin || !seleccionados.length) {
-        Swal.fire('Error', 'Complete todos los campos.', 'error');
-        return;
-    } 
-    if (fecha < hoy) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Fecha inválida',
-            text: 'La fecha de la convocatoria no puede ser anterior a hoy.'
-        });
-        return;
-    }
-
-    if (fin < inicio) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Hora inválida',
-            text: 'La hora fin no puede ser menor a la hora inicio.'
-        });
-        return;
-    }
-
-    const datos = seleccionados.map(i => participantes[i]);
-    const payload = {
-        nombreConvocatoria: nombre,
-        fechaConvocatoria: fecha,
-        horaInicio: inicio,
-        horaFin: fin,
-        participantes: datos
-    };
-
-    fetch('https://hook.us2.make.com/q81kwthc4yussd5e77n7yqwwvfu2lodw', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    })
-    .then(response =>Swal.fire({icon: 'success',title: 'Éxito',text: 'Convocatoria enviada.',timer: 2000,showConfirmButton: false}))
-    .catch(() => Swal.fire('Error', 'Error de conexión', 'error'));
-
-    limpiarFormularioConvocatoria();
-}
-
-function limpiarFormularioConvocatoria() {
-    document.getElementById('nombreConvocatoria').value = '';
-    document.getElementById('fechaConvocatoria').value = '';
-    document.getElementById('horaInicio').value = '';
-    document.getElementById('horaFin').value = '';
-    $('#selectParticipante').val(null).trigger('change');
-}
+window.onload = actualizarMatriz;
 </script>
+
+<div id="loader-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.8); z-index: 9999; align-items: center; justify-content: center;">
+    <img src="C:\Users\ASEG_CALIDAD\Downloads\tigrillo.gif" alt="Cargando..." style="width: 250; height: 250px;">
+</div>
 
 </body>
 </html>
