@@ -81,101 +81,30 @@
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Buscar...">
     </div>
 
-    <table>
-        <caption>Detalles de los Resultados del Examen</caption>
-        <thead>
-            <tr>
-                <th>Asignatura
-                    <div class="filters">
-                        <select id="filterAsignatura" onchange="filterTable()">
-                            <option value="">Seleccionar Asignatura</option>
-                            <option value="Ejemplo Asignatura">Ejemplo Asignatura</option>
-                            <option value="Asignatura 2">Asignatura 2</option>
-                        </select>
-                    </div>
-                </th>
-                <th>Componente
-                    <div class="filters">
-                        <select id="filterComponente" onchange="filterTable()">
-                            <option value="">Seleccionar Componente</option>
-                            <option value="Componente 1">Componente 1</option>
-                            <option value="Componente 2">Componente 2</option>
-                        </select>
-                    </div>
-                </th>
-                <th>Subcomponente
-                    <div class="filters">
-                        <select id="filterSubcomponente" onchange="filterTable()">
-                            <option value="">Seleccionar Subcomponente</option>
-                            <option value="Subcomponente A">Subcomponente A</option>
-                            <option value="Subcomponente B">Subcomponente B</option>
-                        </select>
-                    </div>
-                </th>
-                <th>Tema
-                    <div class="filters">
-                        <select id="filterTema" onchange="filterTable()">
-                            <option value="">Seleccionar Tema</option>
-                            <option value="Tema X">Tema X</option>
-                            <option value="Tema Y">Tema Y</option>
-                        </select>
-                    </div>
-                </th>
-                <th>Profesor
-                    <div class="filters">
-                        <select id="filterProfesor" onchange="filterTable()">
-                            <option value="">Seleccionar Profesor</option>
-                            <option value="Profesor 1">Profesor 1</option>
-                            <option value="Profesor 2">Profesor 2</option>
-                        </select>
-                    </div>
-                </th>
-                <th>Tipo
-                    <div class="filters">
-                        <select id="filterTipo" onchange="filterTable()">
-                            <option value="">Seleccionar Tipo</option>
-                            <option value="Tipo A">Tipo A</option>
-                            <option value="Tipo B">Tipo B</option>
-                        </select>
-                    </div>
-                </th>
-                <th>Periodo
-                    <div class="filters">
-                        <select id="filterPeriodo" onchange="filterTable()">
-                            <option value="">Seleccionar Periodo</option>
-                            <option value="Periodo 2024">Periodo 2024</option>
-                            <option value="Periodo 2025">Periodo 2025</option>
-                        </select>
-                    </div>
-                </th>
-                <th>% de Acierto</th> <!-- Nueva columna -->
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Datos de ejemplo -->
-            <tr>
-                <td>Ejemplo Asignatura</td>
-                <td>Componente 1</td>
-                <td>Subcomponente A</td>
-                <td>Tema X</td>
-                <td>Profesor 1</td>
-                <td>Tipo A</td>
-                <td>Periodo 2024</td>
-                <td>80%</td> <!-- Ejemplo de % de acierto -->
-            </tr>
-            <tr>
-                <td>Asignatura 2</td>
-                <td>Componente 2</td>
-                <td>Subcomponente B</td>
-                <td>Tema Y</td>
-                <td>Profesor 2</td>
-                <td>Tipo B</td>
-                <td>Periodo 2024</td>
-                <td>85%</td> <!-- Ejemplo de % de acierto -->
-            </tr>
-            <!-- Más filas se agregarían aquí -->
-        </tbody>
-    </table>
+  <table id="tabla" border="1"></table>
+
+  <script>
+    fetch("URL_DE_TU_SCRIPT_WEB_APP") // Reemplaza por la URL generada al publicar
+      .then(response => response.json())
+      .then(data => {
+        const tabla = document.getElementById("tabla");
+        if (data.length === 0) return;
+
+        const columnas = ["Asignatura", "Componente", "Subcomponente", "Tema", "Profesor", "tipo", "Periodo"];
+
+        let encabezado = "<tr>";
+        columnas.forEach(col => encabezado += <th>${col}</th>);
+        encabezado += "</tr>";
+        tabla.innerHTML += encabezado;
+
+        data.forEach(fila => {
+          let filaHtml = "<tr>";
+          columnas.forEach(col => filaHtml += <td>${fila[col] || ''}</td>);
+          filaHtml += "</tr>";
+          tabla.innerHTML += filaHtml;
+        });
+      });
+  </script>
 
     <!-- Sección para cargar documentos -->
     <div class="upload-section">
