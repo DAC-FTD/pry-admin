@@ -71,11 +71,64 @@
             margin-top: 10px;
         }
     </style>
+        <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
+
 </head>
 <body>
+    
+    <h6 style="text-align: center;">Matriz de resultados del Examen de Habilitación para el Ejercicio Profesional</h6>
+<!-- Sección para cargar imagen -->
+    <div class="upload-section">
+        <h3>Cargar Imagen para Procesar</h3>
+        <div class="upload-container">
+            <input type="file" id="imgfile" accept="image/*">
+            <label for="imgfile">Seleccionar Imagen</label>
+            <span>Tipos de archivo permitidos: .jpg, .png, .jpeg</span>
+        </div>
+        <button onclick="procesarImagen()">Procesar Imagen</button>
+    </div>
 
-    <h1 style="text-align: center;">Matriz de resultados del Examen de Habilitación para el Ejercicio Profesional</h1>
+    <!-- Resultados del OCR -->
+    <div id="result"></div>
 
+    <script>
+        // Función que maneja el procesamiento de la imagen cargada
+        function procesarImagen() {
+            var file = document.getElementById("imgfile").files[0];  // Obtener el archivo cargado
+            if (!file) {
+                alert("Por favor, selecciona una imagen.");
+                return;
+            }
+
+            // Usamos FileReader para leer la imagen
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                const image = event.target.result;  // Obtener el resultado base64 de la imagen
+
+                // Usar Tesseract.js para realizar OCR y extraer el texto
+                Tesseract.recognize(
+                    image,
+                    'spa',  // Idioma español
+                    {
+                        logger: m => console.log(m)  // Mostrar logs de progreso
+                    }
+                ).then(({ data: { text } }) => {
+                    // Mostrar los datos extraídos en la página
+                    document.getElementById("result").innerText = text;
+                }).catch(error => {
+                    // Manejar errores
+                    console.error("Error al procesar la imagen:", error);
+                    alert("Hubo un error al procesar la imagen.");
+                });
+            };
+
+            // Leer la imagen como URL (base64)
+            reader.readAsDataURL(file);
+        }
+    </script>
+
+
+    
     <div class="search-container">
         <label for="searchInput">Buscar en la tabla:</label>
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Buscar...">
