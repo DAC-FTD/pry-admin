@@ -213,7 +213,8 @@ function confirmarEnvio() {
         title: '¿Está seguro?',
         text: "Se enviará la convocatoria a los participantes seleccionados.",
         icon: 'question',
-        showCancelButton: true,
+        showCancelButton: true, 
+        cancelButtonText: 'Cancelar',
         confirmButtonText: 'Sí, enviar'
     }).then(result => {
         if (result.isConfirmed) enviarConvocatoria();
@@ -226,9 +227,27 @@ function enviarConvocatoria() {
     const inicio = $('#horaInicio').val();
     const fin = $('#horaFin').val();
     const seleccionados = $('#selectParticipante').val();
+    const hoy = new Date().toISOString().split('T')[0]; // formato yyyy-mm-dd
 
     if (!nombre || !fecha || !inicio || !fin || !seleccionados.length) {
         Swal.fire('Error', 'Complete todos los campos.', 'error');
+        return;
+    } 
+    if (fecha < hoy) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Fecha inválida',
+            text: 'La fecha de la convocatoria no puede ser anterior a hoy.'
+        });
+        return;
+    }
+
+    if (fin < inicio) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Hora inválida',
+            text: 'La hora fin no puede ser menor a la hora inicio.'
+        });
         return;
     }
 
@@ -246,8 +265,18 @@ function enviarConvocatoria() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     })
-    .then(r => r.ok ? Swal.fire('Éxito', 'Convocatoria enviada', 'success') : Swal.fire('Error', 'No se pudo enviar', 'error'))
+    .then(response =>Swal.fire({icon: 'success',title: 'Éxito',text: 'Convocatoria enviada.',timer: 2000,showConfirmButton: false}))
     .catch(() => Swal.fire('Error', 'Error de conexión', 'error'));
+
+    limpiarFormularioConvocatoria();
+}
+
+function limpiarFormularioConvocatoria() {
+    document.getElementById('nombreConvocatoria').value = '';
+    document.getElementById('fechaConvocatoria').value = '';
+    document.getElementById('horaInicio').value = '';
+    document.getElementById('horaFin').value = '';
+    $('#selectParticipante').val(null).trigger('change');
 }
 </script>
 
